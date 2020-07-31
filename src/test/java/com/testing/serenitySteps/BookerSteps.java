@@ -6,12 +6,15 @@ import io.restassured.response.Response;
 import net.serenitybdd.core.Serenity;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.annotations.Steps;
+import org.jruby.RubyProcess;
 import org.junit.Assert;
+import sun.security.action.PutAllAction;
 
 import java.io.IOException;
 import java.util.Map;
 
 import static net.serenitybdd.core.Serenity.sessionVariableCalled;
+import static net.serenitybdd.core.Serenity.setSessionVariable;
 
 public class BookerSteps extends BaseSteps {
   private final static String _AUTH_ = "/auth/";
@@ -41,4 +44,41 @@ public class BookerSteps extends BaseSteps {
     Response response = Serenity.sessionVariableCalled(RESPONSE);
     Assert.assertEquals("Amount of Booking Ids", amount, response.jsonPath().getList("bookingid").size());
   }
+
+  @Step
+  public static void createBooking(DataTable dataTable) throws IOException {
+    sendRequestWithBodyJson(POST, _BOOKING_, createBody(dataTable));
+    Response response = Serenity.sessionVariableCalled(RESPONSE);
+    Integer str = response.jsonPath().get("bookingid");
+    setSessionVariable("bookingid").to(str);
+
+    System.out.println("---------------");
+    System.out.println(str);
+  }
+
+  @Step
+  public static void getBooking(){
+    sendRequest(GET, _BOOKING_+ sessionVariableCalled("bookingid"));
+
+  }
+  @Step
+  public static void updateBooking(DataTable dataTable) throws IOException {
+    sendRequestWithBodyJson(PUT, _BOOKING_ + sessionVariableCalled("bookingid"), createBody(dataTable));
+
+  }
+
+  @Step
+  public static void partiallyUpdateBooking(DataTable dataTable) throws IOException {
+    sendRequestWithBodyJson(PATCH, _BOOKING_ + sessionVariableCalled("bookingid"),createBody(dataTable));
+  }
+
+ @Step
+  public static void deleteBooking(){
+    sendRequest(DELETE, _BOOKING_ + sessionVariableCalled("bookingid"));
+  }
+
+
+
+
+
 }

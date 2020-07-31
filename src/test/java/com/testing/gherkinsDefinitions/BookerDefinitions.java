@@ -24,4 +24,34 @@ public class BookerDefinitions {
   public void theAmountOfBookingIdsIs(Integer amount) {
     BookerSteps.validateAmountOfBookingIds(amount);
   }
+
+  @When("^the user requests booking with following data:$")
+  public void theUserRequestBookingWithFollowingData(DataTable dataTable) throws IOException {
+    BookerSteps.createBooking(dataTable);
+  }
+
+  @When("^the user requests booking$")
+  public void theUserRequestsBooking() {
+    BookerSteps.getBooking();  }
+
+
+  @When("^the user requests to update booking with following data:$")
+  public void theUserRequestsToUpdateBookingWithFollowingData(DataTable dataTable) throws IOException{
+    BookerSteps.updateBooking(dataTable);
+  }
+
+  @When("^the user requests to partially update booking with following data:$")
+  public void theUserRequestsToPartiallyUpdateBookingWithFollowingData(DataTable dataTable) throws IOException {
+  BookerSteps.partiallyUpdateBooking(dataTable);
+  }
+
+  @When("^the user deletes the booking$")
+  public void theUserDeletesTheBooking() {
+  BookerSteps.deleteBooking();
+  }
+
+  @And("^the user gets the requested booking$")
+  public void theUserGetsTheRequestedBooking() {
+    BookerSteps.getBooking();
+  }
 }
